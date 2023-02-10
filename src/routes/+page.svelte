@@ -28,6 +28,7 @@
 			viewState = 'schema-error';
 		}
 	}
+
 	function didCancelConnect() {
 		if (!driver) {
 			viewState = 'disconnected';
@@ -35,26 +36,30 @@
 			viewState = 'idle';
 		}
 	}
+
 	function onConnect({ detail }: { detail: { driver: Driver } }) {
 		didConnect(detail.driver);
 	}
 
-	async function runPrompt(e: SubmitEvent) {
+	async function run(e: SubmitEvent) {
 		e.preventDefault();
-		if (!driver) {
+		if (!prompt) {
 			return;
 		}
-		viewState = 'executing';
-		const inputPrompt = prompt;
-		const cmd = prompt;
-
+		if (!driver) {
+			viewState = 'connection-modal';
+			return;
+		}
+		let cypher = '';
 		try {
-			const res = await runQuery(driver, prompt);
+			viewState = 'executing';
+			cypher = await runPrompt(prompt);
+			const result = await runCypher(cypher);
 			const newResponse = {
 				id: id++,
-				inputPrompt,
-				result: res,
-				cmd,
+				prompt,
+				result: result,
+				cypher,
 				status: 'success' as Statuses['success']
 			};
 			responses.unshift(newResponse);
@@ -62,9 +67,9 @@
 		} catch (e) {
 			const newResponse = {
 				id: id++,
-				inputPrompt,
+				prompt,
 				data: (e as Error).message,
-				cmd,
+				cypher,
 				status: 'error' as Statuses['error']
 			};
 			responses.unshift(newResponse);
@@ -74,6 +79,15 @@
 			prompt = '';
 		}
 	}
+
+	async function runPrompt(userInput: string) {
+		return userInput;
+	}
+
+	async function runCypher(query: string) {
+		return await runQuery(driver!, query);
+	}
+
 	function removeResponse(id: number) {
 		responses = responses.filter((r) => r.id !== id);
 	}
@@ -82,7 +96,7 @@
 <main
 	class="grid grid-cols-1 gap-4 place-items-center mt-44 w-11/12 sm:w-3/5 mx-auto min-w-[350px] max-w-[650px]"
 >
-	<form class=" w-full" on:submit={runPrompt}>
+	<form class=" w-full" on:submit={run}>
 		<div>
 			<input
 				readonly={viewState === 'executing'}
@@ -105,8 +119,8 @@
 		{#each responses as response (response.id)}
 			<div class="response" transition:slide>
 				<div class="header">
-					<div title={response.cmd} class="cypher">
-						{response.cmd}
+					<div title={response.cypher} class="cypher">
+						{response.cypher}
 					</div>
 					<button class="close-btn" on:click={() => removeResponse(response.id)}>&times;</button>
 				</div>

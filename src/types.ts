@@ -2,8 +2,8 @@ import type { QueryResult } from 'neo4j-driver';
 
 interface ResponseType {
 	id: number;
-	cmd: string;
-	inputPrompt: string;
+	cypher: string;
+	prompt: string;
 }
 export type Statuses = {
 	[key in 'success' | 'error']: key;
