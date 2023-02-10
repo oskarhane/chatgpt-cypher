@@ -82,7 +82,7 @@
 </script>
 
 <dialog bind:this={dialog}>
-	<h3>Connect to Neo4j</h3>
+	<h3 class="text-center">Connect to Neo4j</h3>
 	<form method="dialog">
 		<label>
 			<span>Connection URL</span>
@@ -123,9 +123,6 @@
 		padding: 16px;
 		border-radius: 6px;
 	}
-	h3 {
-		text-align: center;
-	}
 	.actions {
 		display: flex;
 		flex-direction: column;
@@ -144,74 +141,10 @@
 	.split label {
 		width: 45%;
 	}
-	button {
-		width: 50%;
-		text-align: center;
-	}
-	label {
-		color: var(--form-label-text-color);
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 4px;
-		margin-top: 1.5rem;
-	}
-	label span {
-		letter-spacing: 0.25px;
-	}
-
 	dialog {
 		border-radius: 16px;
 		width: 500px;
 		border: 0;
 		padding: 3rem 2rem;
-	}
-	button {
-		transition: background-color 75ms ease;
-		display: inline-flex;
-		cursor: pointer;
-		align-items: center;
-		justify-content: center;
-		gap: 0.125rem;
-		border-radius: 4px;
-		font-weight: 700;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-	}
-	button.text {
-		border-style: none;
-		background-color: transparent;
-	}
-	button.primary.text {
-		color: var(--text-primary-50);
-	}
-	button.primary.text:hover {
-		background-color: rgb(230 248 255);
-	}
-	button.primary.filled {
-		background-color: var(--text-primary-50);
-	}
-	button.primary.filled:hover {
-		background-color: rgb(0 86 179);
-	}
-	button.large {
-		height: 3rem;
-		padding: 0.75rem 1.5rem;
-		font-size: var(--font-size-h6);
-		font-weight: var(--font-weight-bold);
-		letter-spacing: 0.25px;
-		line-height: 24px;
-	}
-	button.filled {
-		border-width: 0px;
-		color: rgb(255 255 255);
-	}
-	input {
-		height: 3rem;
-		padding: 0.75rem;
-		border-radius: 4px;
-		font-size: 1rem;
-		border: 1px solid var(--border-color);
-		width: 100%;
 	}
 </style>
