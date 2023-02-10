@@ -9,11 +9,12 @@
 
 	let viewState: 'idle' | 'executing' | 'disconnected' | 'connection-modal' | 'schema-error' =
 		'connection-modal';
-	let prompt = 'How many movies did Tom Hanks star in?';
+	let prompt = '';
 	let schema = '';
 	let error = '';
 	let driver: Driver | null = null;
 	let responses: Response[] = [];
+	let metadata: { [key: string]: string } = {};
 	let id = 0;
 
 	async function didConnect(newDriver: Driver) {
@@ -53,7 +54,7 @@
 		let cypher = '';
 		try {
 			viewState = 'executing';
-			cypher = await runPrompt(prompt);
+			cypher = await runPrompt();
 			const result = await runCypher(cypher);
 			const newResponse = {
 				id: id++,
@@ -80,12 +81,13 @@
 		}
 	}
 
-	async function runPrompt(userInput: string): Promise<string> {
+	async function runPrompt(): Promise<string> {
 		const response = await fetch('/translate', {
 			method: 'POST',
-			body: JSON.stringify({ schema, prompt: userInput })
+			body: JSON.stringify({ schema, prompt, metadata })
 		});
 		const json = await response.json();
+		metadata = json.metadata;
 		return json.cypher;
 	}
 
@@ -99,7 +101,7 @@
 </script>
 
 <main
-	class="grid grid-cols-1 gap-4 place-items-center mt-44 w-11/12 sm:w-3/5 mx-auto min-w-[350px] max-w-[650px]"
+	class="grid grid-cols-1 gap-4 place-items-center mt-44 w-11/12 sm:w-3/5 mx-auto min-w-[350px] max-w-[750px]"
 >
 	<form class=" w-full" on:submit={run}>
 		<div>

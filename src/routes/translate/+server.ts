@@ -4,7 +4,7 @@ import type { RequestHandler } from './$types';
 
 export const POST = (async (event) => {
 	const { request } = event;
-	const { prompt, schema } = await request.json();
+	const { prompt, schema, metadata = {} } = await request.json();
 
 	const fullPrompt = `With this JSON that describes a schema for a property graph database: 
     
@@ -15,9 +15,14 @@ export const POST = (async (event) => {
     Can you generate a Cypher query that will answer the question?`;
 
 	const api = new ChatGPTAPI({
-		apiKey: OPENAI_API_KEY
+		apiKey: OPENAI_API_KEY,
+		...metadata
 	});
 	const res = await api.sendMessage(fullPrompt);
-	console.log('res: ', res);
-	return new Response(JSON.stringify({ cypher: res.text }));
+	return new Response(
+		JSON.stringify({
+			cypher: res.text,
+			metadata: { conversationId: res.conversationId, parentMessageId: res.id }
+		})
+	);
 }) satisfies RequestHandler;
