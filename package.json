@@ -34,6 +34,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"chatgpt": "^4.2.0",
 		"neo4j-driver": "^5.5.0"
 	}
 }

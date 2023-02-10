@@ -54,6 +54,11 @@
 	}
 </script>
 
+{#if recordObjs.keys.length === 0}
+	<div class="px-2 text-md italic">
+		<p>No results</p>
+	</div>
+{/if}
 <table>
 	<thead
 		><tr>

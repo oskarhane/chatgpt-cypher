@@ -9,7 +9,7 @@
 
 	let viewState: 'idle' | 'executing' | 'disconnected' | 'connection-modal' | 'schema-error' =
 		'connection-modal';
-	let prompt = 'MATCH (n) RETURN n LIMIT 10';
+	let prompt = 'How many movies did Tom Hanks star in?';
 	let schema = '';
 	let error = '';
 	let driver: Driver | null = null;
@@ -80,8 +80,13 @@
 		}
 	}
 
-	async function runPrompt(userInput: string) {
-		return userInput;
+	async function runPrompt(userInput: string): Promise<string> {
+		const response = await fetch('/translate', {
+			method: 'POST',
+			body: JSON.stringify({ schema, prompt: userInput })
+		});
+		const json = await response.json();
+		return json.cypher;
 	}
 
 	async function runCypher(query: string) {
@@ -100,7 +105,7 @@
 		<div>
 			<input
 				readonly={viewState === 'executing'}
-				placeholder="What insights are you looking for?"
+				placeholder="Using the connected dataset, what do you want to know?"
 				type="text"
 				class="w-full"
 				bind:value={prompt}
@@ -118,11 +123,18 @@
 	<stream class="w-full mt-8">
 		{#each responses as response (response.id)}
 			<div class="response" transition:slide>
-				<div class="header">
-					<div title={response.cypher} class="cypher">
-						{response.cypher}
+				<div class="header text-lg text-gray-400 p-4 flex flex-row">
+					<div class="p-2 w-full overflow-x-hidden text-sm">
+						{#each [{ name: 'Prompt', text: response.prompt }, { name: 'Cypher', text: response.cypher }] as section}
+							<details open class="block px-2 mt-2">
+								<summary class="text-gray-500 block">{section.name}</summary>
+								<pre class="text-xs">{section.text}</pre>
+							</details>
+						{/each}
 					</div>
-					<button class="close-btn" on:click={() => removeResponse(response.id)}>&times;</button>
+					<button class="close-btn grow-0 shrink-0 w-9" on:click={() => removeResponse(response.id)}
+						>&times;</button
+					>
 				</div>
 				<div class="body">
 					{#if response.status === 'success'}
@@ -143,6 +155,9 @@
 />
 
 <style>
+	pre {
+		white-space: pre-line;
+	}
 	.response {
 		margin-top: 14px;
 		font-family: monospace;
@@ -152,27 +167,6 @@
 		border-radius: 6px;
 		border: 1px solid rgb(238 241 246);
 	}
-	.response .header {
-		padding: 16px;
-		color: #888;
-		font-size: 17px;
-		display: flex;
-		align-items: center;
-		position: relative;
-		overflow: hidden;
-	}
-	.response .header .cypher {
-		flex: auto 1 1;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		height: 30px;
-		white-space: nowrap;
-		border-radius: 6px;
-		border: 1px solid rgb(196 200 205);
-		line-height: 29px;
-		padding: 0 16px;
-	}
-
 	.response .header .close-btn {
 		font-weight: normal;
 		font-family: 'times new roman', times, georgia, serif;
