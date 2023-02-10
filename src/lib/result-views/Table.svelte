@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { isInt, type QueryResult } from 'neo4j-driver';
-	export let result: QueryResult;
-	const recordObjs = result.records.reduce<{ keys: PropertyKey[]; rows: string[][] }>(
+	import { isInt, type Record } from 'neo4j-driver';
+	export let records: Record[];
+	const recordObjs = records.reduce<{ keys: PropertyKey[]; rows: string[][] }>(
 		(all, r, index) => {
 			const keys = r.keys;
 			if (index === 0) {
