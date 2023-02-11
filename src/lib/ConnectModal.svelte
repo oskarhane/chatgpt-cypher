@@ -10,7 +10,7 @@
 	let passwordElement: HTMLInputElement;
 	let connectURL = 'neo4j://localhost:7687';
 	let username = 'neo4j';
-	let password = 'newpassword';
+	let password = '';
 	let chatGPTToken = '';
 	let dispatch = createEventDispatcher();
 	let driver: Driver;
