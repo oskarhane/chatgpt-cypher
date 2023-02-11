@@ -6,6 +6,7 @@
 	import Generic from '$lib/result-views/Generic.svelte';
 	import type { Response, ResponseError, ResponseSuccess, ResponseText, Statuses } from '../types';
 	import Frame from '$lib/Frame.svelte';
+	import { runPrompt } from '$lib/run-prompt';
 
 	let viewState: 'idle' | 'executing' | 'disconnected' | 'connection-modal' | 'schema-error' =
 		'connection-modal';
@@ -13,6 +14,7 @@
 	let schema = '';
 	let error = '';
 	let driver: Driver | null = null;
+	let apiToken: string;
 	let responses: Response[] = [];
 	let metadata: { [key: string]: string } = {};
 	let id = 0;
@@ -48,7 +50,8 @@
 		}
 	}
 
-	function onConnect({ detail }: { detail: { driver: Driver } }) {
+	function onConnect({ detail }: { detail: { driver: Driver; chatGPTToken: string } }) {
+		apiToken = detail.chatGPTToken;
 		didConnect(detail.driver);
 	}
 
@@ -64,7 +67,14 @@
 		let cypher = '';
 		try {
 			viewState = 'executing';
-			cypher = await runPrompt();
+			const [gptCypher, gptMetadata] = await runPrompt({
+				prompt,
+				schema,
+				token: apiToken,
+				metadata
+			});
+			cypher = gptCypher;
+			metadata = gptMetadata;
 			const result = await runCypher(cypher);
 			addResponse({
 				prompt,
@@ -90,16 +100,6 @@
 	) {
 		responses.unshift({ id: id++, ...response } as Response);
 		responses = responses;
-	}
-
-	async function runPrompt(): Promise<string> {
-		const response = await fetch('/translate', {
-			method: 'POST',
-			body: JSON.stringify({ schema, prompt, metadata })
-		});
-		const json = await response.json();
-		metadata = json.metadata;
-		return json.cypher;
 	}
 
 	async function runCypher(query: string) {
@@ -147,7 +147,7 @@
 			</Frame>
 		</div>
 	{/if}
-	<stream class="w-full mt-8">
+	<stream class="w-full mt-8 mb-16">
 		{#each responses as response (response.id)}
 			<Frame on:close={() => removeResponse(response.id)}>
 				<div slot="head">

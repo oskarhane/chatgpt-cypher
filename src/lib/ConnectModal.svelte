@@ -11,6 +11,7 @@
 	let connectURL = 'neo4j://localhost:7687';
 	let username = 'neo4j';
 	let password = 'newpassword';
+	let chatGPTToken = '';
 	let dispatch = createEventDispatcher();
 	let driver: Driver;
 
@@ -53,7 +54,7 @@
 		}
 		try {
 			driver = await connect({ connectURL, username, password });
-			dispatch('connect', { driver });
+			dispatch('connect', { driver, chatGPTToken });
 			resetForm();
 		} catch (e) {
 			const message = e instanceof Error ? e.message : 'Unknown error';
@@ -65,6 +66,7 @@
 	function resetForm() {
 		error = '';
 		password = '';
+		chatGPTToken = '';
 	}
 
 	function toggleModal(show: boolean) {
@@ -103,6 +105,10 @@
 				<input bind:this={passwordElement} type="password" bind:value={password} />
 			</label>
 		</div>
+		<label>
+			<span>ChapGPT API Token</span>
+			<input class="w-full" type="text" bind:value={chatGPTToken} />
+		</label>
 		{#if error.length}
 			<div class="error">
 				{error}
