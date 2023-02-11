@@ -84,9 +84,9 @@
 </script>
 
 <dialog bind:this={dialog}>
-	<h3 class="text-center">Connect to Neo4j</h3>
+	<h3 class="text-center text-md">Connect to Neo4j</h3>
 	<form method="dialog">
-		<label>
+		<label class="mt-2">
 			<span>Connection URL</span>
 			<input
 				class="w-full"
@@ -105,17 +105,20 @@
 				<input bind:this={passwordElement} type="password" bind:value={password} />
 			</label>
 		</div>
-		<label>
-			<span
-				>ChapGPT API Key (<a
-					class="underline text-xs"
-					href="https://platform.openai.com/account/api-keys"
-					rel="noreferrer"
-					target="_blank">found here</a
-				>)</span
-			>
-			<input class="w-full" type="text" bind:value={chatGPTToken} />
-		</label>
+		<div class="mt-8 mb-0">
+			<h3 class="text-center text-md">OpenAI API Key</h3>
+			<label class="mt-2">
+				<span
+					>API Key (<a
+						class="underline text-xs"
+						href="https://platform.openai.com/account/api-keys"
+						rel="noreferrer"
+						target="_blank">found here</a
+					>)</span
+				>
+				<input class="w-full" type="text" bind:value={chatGPTToken} />
+			</label>
+		</div>
 		{#if error.length}
 			<div class="error">
 				{error}
