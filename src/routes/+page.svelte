@@ -4,7 +4,7 @@
 	import { runQuery } from '$lib/cypher.utils';
 	import Table from '$lib/result-views/Table.svelte';
 	import Generic from '$lib/result-views/Generic.svelte';
-	import type { Response, Statuses } from '../types';
+	import type { Response, ResponseError, ResponseSuccess, ResponseText, Statuses } from '../types';
 	import Frame from '$lib/Frame.svelte';
 
 	let viewState: 'idle' | 'executing' | 'disconnected' | 'connection-modal' | 'schema-error' =
@@ -21,10 +21,17 @@
 		error = '';
 		driver = newDriver;
 		viewState = 'idle';
+		const schemaQuery = 'CALL experimental.introspect.asJson({})';
 		// get schema from db
 		try {
-			const res = await runQuery(driver, 'CALL experimental.introspect.asJson({})');
+			const res = await runQuery(driver, schemaQuery);
 			schema = res.records[0].get(0);
+			addResponse({
+				status: 'text' as Statuses['text'],
+				data: JSON.stringify(JSON.parse(schema), null, 2),
+				prompt: '-',
+				cypher: schemaQuery
+			});
 		} catch (e) {
 			await driver.close();
 			driver = null;
@@ -59,29 +66,30 @@
 			viewState = 'executing';
 			cypher = await runPrompt();
 			const result = await runCypher(cypher);
-			const newResponse = {
-				id: id++,
+			addResponse({
 				prompt,
 				result: result,
 				cypher,
 				status: 'success' as Statuses['success']
-			};
-			responses.unshift(newResponse);
-			responses = responses;
+			});
 		} catch (e) {
-			const newResponse = {
-				id: id++,
+			addResponse({
 				prompt,
 				data: (e as Error).message,
 				cypher,
 				status: 'error' as Statuses['error']
-			};
-			responses.unshift(newResponse);
-			responses = responses;
+			});
 		} finally {
 			viewState = 'idle';
 			prompt = '';
 		}
+	}
+
+	function addResponse(
+		response: Omit<ResponseSuccess, 'id'> | Omit<ResponseError, 'id'> | Omit<ResponseText, 'id'>
+	) {
+		responses.unshift({ id: id++, ...response } as Response);
+		responses = responses;
 	}
 
 	async function runPrompt(): Promise<string> {

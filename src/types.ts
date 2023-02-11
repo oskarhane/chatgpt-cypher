@@ -6,14 +6,18 @@ interface ResponseType {
 	prompt: string;
 }
 export type Statuses = {
-	[key in 'success' | 'error']: key;
+	[key in 'success' | 'error' | 'text']: key;
 };
-interface ResponseSuccess extends ResponseType {
+export interface ResponseSuccess extends ResponseType {
 	result: QueryResult;
 	status: Statuses['success'];
 }
-interface ResponseError extends ResponseType {
+export interface ResponseError extends ResponseType {
 	data: string;
 	status: Statuses['error'];
+}
+export interface ResponseText extends ResponseType {
+	data: string;
+	status: Statuses['text'];
 }
 export type Response = ResponseSuccess | ResponseError;
