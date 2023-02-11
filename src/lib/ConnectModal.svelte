@@ -106,7 +106,14 @@
 			</label>
 		</div>
 		<label>
-			<span>ChapGPT API Key</span>
+			<span
+				>ChapGPT API Key (<a
+					class="underline text-xs"
+					href="https://platform.openai.com/account/api-keys"
+					rel="noreferrer"
+					target="_blank">found here</a
+				>)</span
+			>
 			<input class="w-full" type="text" bind:value={chatGPTToken} />
 		</label>
 		{#if error.length}
