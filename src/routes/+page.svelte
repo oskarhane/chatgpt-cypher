@@ -180,4 +180,8 @@
 	pre {
 		white-space: pre-line;
 	}
+	details > summary::-webkit-details-marker,
+	details > summary::marker {
+		display: none;
+	}
 </style>
