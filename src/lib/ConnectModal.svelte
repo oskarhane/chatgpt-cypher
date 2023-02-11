@@ -106,7 +106,7 @@
 			</label>
 		</div>
 		<label>
-			<span>ChapGPT API Token</span>
+			<span>ChapGPT API Key</span>
 			<input class="w-full" type="text" bind:value={chatGPTToken} />
 		</label>
 		{#if error.length}

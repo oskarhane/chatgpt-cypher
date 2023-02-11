@@ -1,38 +1,21 @@
-# create-svelte
+### Query Neo4j with Natural Language
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This experiment started with showing different use cases for
+having a standardized format to describe a property graph schema.
 
-## Creating a project
+There's a JSON schema that describes what a Graph Schema in JSON format
+should look like at: https://github.com/neo4j/graph-schema-json-js-utils/blob/main/packages/json-schema/json-schema.json
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Prerequisites
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Neo4j 5.3 or higher: https://neo4j.com  
+Experimental Neo4j Graph Schema inference plugin: https://github.com/neo4j/graph-schema-introspector/releases/tag/early-access  
+OpenAI API Key: https://platform.openai.com/account/api-keys  
+Nodejs >= 18: https://nodejs.org/en/
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+### Usage
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+1. Clone this repo
+2. Open terminal and install deps: `npm install`
+3. (optional): Copy `.env.exmaple` -> `.env` and enter your OpenAI API Key. So you don't have to enter it in the UI all the time.
+4. To run in dev mode (auto-reload if you make changes): `npm run dev` or in prod mode: `npm run build && npm start`.
