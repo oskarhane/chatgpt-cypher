@@ -37,7 +37,11 @@ export async function connect({
 	username: string;
 	password: string;
 }): Promise<Driver> {
-	const newDriver = neo4j.driver(connectURL, neo4j.auth.basic(username, password));
+	const encrypted = connectURL.includes('+s://');
+	const normalizedConnectURL = connectURL.replace(/\+s:\/\//, '://');
+	const newDriver = neo4j.driver(normalizedConnectURL, neo4j.auth.basic(username, password), {
+		encrypted
+	});
 	await newDriver.verifyConnectivity();
 	return newDriver;
 }
