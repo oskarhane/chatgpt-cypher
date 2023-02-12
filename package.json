@@ -4,9 +4,11 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
+		"devs": "ENABLE_SSL=1 vite dev",
 		"build": "vite build",
 		"start": "node build",
 		"preview": "vite preview",
+		"previews": "ENABLE_SSL=1 vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
