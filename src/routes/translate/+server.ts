@@ -1,4 +1,3 @@
-import { OPENAI_API_KEY } from '$env/static/private';
 import { error } from '@sveltejs/kit';
 import { ChatGPTAPI, ChatGPTError } from 'chatgpt';
 import type { RequestHandler } from './$types';
@@ -17,7 +16,7 @@ export const POST = (async (event) => {
 
 	try {
 		const api = new ChatGPTAPI({
-			apiKey: token || OPENAI_API_KEY,
+			apiKey: token,
 			...metadata
 		});
 		const res = await api.sendMessage(fullPrompt);
