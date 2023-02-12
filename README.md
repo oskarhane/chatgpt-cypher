@@ -14,6 +14,8 @@ should look like at: https://github.com/neo4j/graph-schema-json-js-utils/blob/ma
 Here we pass the schema with the natural language prompt to give ChatGPT context and knowledge on
 how to query the graph in Cypher.
 
+![demo image](repo-resources/demo.png)
+
 ### Prerequisites
 
 Neo4j 5.3 or higher: https://neo4j.com  
