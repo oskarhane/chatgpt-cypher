@@ -25,4 +25,9 @@ Nodejs >= 18: https://nodejs.org/en/
 
 1. Clone this repo
 2. Open terminal and install deps: `npm install`
-3. To run in dev mode (auto-reload if you make changes): `npm run dev` or in prod mode: `npm run build && npm start`.
+3. Start it
+   1. To run in dev mode (auto-reload if you make changes): `npm run dev` and go to http://localhost:5173
+   2. In prod mode: `npm run build && npm start` and go to http://localhost:3000
+4. Enter Neo4j connection details (above mentioned plugin required)
+5. Enter OpenAI API Key (link above)
+6. Start exploring
