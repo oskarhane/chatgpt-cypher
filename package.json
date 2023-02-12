@@ -36,6 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/adapter-node": "^1.1.8",
+		"@vitejs/plugin-basic-ssl": "^1.0.1",
 		"chatgpt": "^4.2.0",
 		"neo4j-driver": "^5.5.0"
 	}
